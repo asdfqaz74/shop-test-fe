@@ -52,13 +52,13 @@ const RegisterPage = () => {
 
   return (
     <Container className="register-area">
-      {registrationError && (
+      {/* {registrationError && (
         <div>
           <Alert variant="danger" className="error-message">
             {registrationError}
           </Alert>
         </div>
-      )}
+      )} */}
       <Form onSubmit={register}>
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
