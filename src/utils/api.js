@@ -27,9 +27,11 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
+    console.log("Response:", response);
     return response;
   },
   function (error) {
+    console.log(error);
     error = error.response.data;
     console.log("RESPONSE ERROR", error);
     return Promise.reject(error);

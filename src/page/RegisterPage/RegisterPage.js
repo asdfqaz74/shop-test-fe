@@ -19,7 +19,6 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [passwordError, setPasswordError] = useState("");
   const [policyError, setPolicyError] = useState(false);
-  const { registrationError } = useSelector((state) => state.user);
 
   const register = (event) => {
     event.preventDefault();
@@ -35,6 +34,7 @@ const RegisterPage = () => {
     }
     setPasswordError("");
     setPolicyError(false);
+    console.log("register", { name, email, password });
     dispatch(registerUser({ name, email, password, navigate }));
   };
 
@@ -52,13 +52,6 @@ const RegisterPage = () => {
 
   return (
     <Container className="register-area">
-      {/* {registrationError && (
-        <div>
-          <Alert variant="danger" className="error-message">
-            {registrationError}
-          </Alert>
-        </div>
-      )} */}
       <Form onSubmit={register}>
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
