@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -17,25 +17,31 @@ const RegisterPage = () => {
     policy: false,
   });
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [policyError, setPolicyError] = useState(false);
 
   const register = (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const { name, email, password, confirmPassword, policy } = formData;
     const checkConfirmPassword = password === confirmPassword;
     if (!checkConfirmPassword) {
       setPasswordError("비밀번호 중복확인이 일치하지 않습니다.");
+      setIsLoading(false);
       return;
     }
     if (!policy) {
       setPolicyError(true);
+      setIsLoading(false);
       return;
     }
     setPasswordError("");
     setPolicyError(false);
-    console.log("register", { name, email, password });
-    dispatch(registerUser({ name, email, password, navigate }));
+
+    dispatch(registerUser({ name, email, password, navigate })).finally(() =>
+      setIsLoading(false)
+    );
   };
 
   const handleChange = (event) => {
@@ -107,9 +113,22 @@ const RegisterPage = () => {
             checked={formData.policy}
           />
         </Form.Group>
-        <Button variant="danger" type="submit">
-          회원가입
-        </Button>
+        {isLoading ? (
+          <Button variant="danger" disabled>
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            로딩중...
+          </Button>
+        ) : (
+          <Button variant="danger" type="submit">
+            회원가입
+          </Button>
+        )}
       </Form>
     </Container>
   );

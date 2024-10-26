@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
@@ -15,6 +15,7 @@ const Login = () => {
   const { user, loginError } = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (loginError) {
@@ -22,8 +23,11 @@ const Login = () => {
     }
   }, [navigate]);
   const handleLoginWithEmail = (event) => {
+    setIsLoading(true);
     event.preventDefault();
-    dispatch(loginWithEmail({ email, password }));
+    dispatch(loginWithEmail({ email, password })).finally(() =>
+      setIsLoading(false)
+    );
   };
 
   const handleGoogleLogin = async (googleData) => {
@@ -62,9 +66,22 @@ const Login = () => {
             />
           </Form.Group>
           <div className="display-space-between login-button-area">
-            <Button variant="danger" type="submit">
-              Login
-            </Button>
+            {isLoading ? (
+              <Button variant="danger" disabled>
+                <Spinner
+                  as="span"
+                  animation="grow"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                로딩중...
+              </Button>
+            ) : (
+              <Button variant="danger" type="submit">
+                Login
+              </Button>
+            )}
             <div>
               아직 계정이 없으세요?<Link to="/register">회원가입 하기</Link>{" "}
             </div>
