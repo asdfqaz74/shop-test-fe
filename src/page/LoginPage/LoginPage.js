@@ -22,9 +22,11 @@ const Login = () => {
       dispatch(clearErrors());
     }
   }, [navigate]);
+
   const handleLoginWithEmail = (event) => {
-    setIsLoading(true);
     event.preventDefault();
+    setIsLoading(true);
+
     dispatch(loginWithEmail({ email, password })).finally(() =>
       setIsLoading(false)
     );
